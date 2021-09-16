@@ -1,0 +1,12 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    ul
+        each recipe in recipe_list
+            script console.log(!{JSON.stringify(recipe)});
+            li
+                a(href=recipe.recipe.url) #{recipe.recipe.name}
+
+        else
+            li Não há receitas. 

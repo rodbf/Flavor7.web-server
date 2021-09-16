@@ -1,0 +1,13 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    if tag
+        ul
+            li= "Nome: " + tag.name
+        p(style='margin-top: 4px')
+            a(href=tag.url+'/update') Update
+        p
+            a(href=tag.url+'/delete') Delete
+    else
+        p Não encontrada.

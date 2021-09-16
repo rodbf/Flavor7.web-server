@@ -1,0 +1,6 @@
+{
+	"TABLE": "step_actions",
+	"ID": "id",
+	"ACTION": "action",
+	"DESCRIPTION": "action_description"
+}

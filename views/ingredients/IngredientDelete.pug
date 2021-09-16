@@ -1,0 +1,12 @@
+extend ../Layout
+
+block content
+    script console.log(!{JSON.stringify(ingredient?ingredient:'')})
+    h1.title= title
+    p Deseja deletar o ingrediente #{ingredient?ingredient.name:''}?
+
+    form.sideBySideForm(method='POST' action='')
+        button.btn.btn-primary(type='submit') Confirmar
+
+    form.sideBySideForm(method='GET' action=ingredient.url)
+        button.btn.btn-primary(type='submit') Cancelar

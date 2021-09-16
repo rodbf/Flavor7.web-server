@@ -1,0 +1,20 @@
+extend ../Layout
+block content
+    h1.title= title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='name') Ação:
+            input#name.form-control(type='text' name='action' 
+            value=(action===undefined?'':action.action), required='true')
+
+            label(for='description') Descrição:
+            input#description.form-control(type='text' name='description' 
+            value=(action===undefined?'':action.description), required='true')
+
+        button.btn.btn-primary(type='submit') Registrar
+
+    if errors
+        ul(style='margin-top: 8px')
+            for error in errors
+                li!= error.msg

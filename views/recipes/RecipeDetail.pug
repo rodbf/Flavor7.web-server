@@ -1,0 +1,30 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    if recipe
+        ul
+            li= "Nome: " + recipe.recipe.name
+            li= "Informações: " + recipe.recipe.description
+            li= "Serve: " + recipe.recipe.servings + (recipe.recipe.servings.search(" ")>0?"":" porções")
+            li= "Tempo de preparo: " + recipe.recipe.duration_formatted
+            br
+            li Ingredientes
+                ul
+                    each ingredient in recipe.ingredients
+                        li= ingredient.formatted
+            br
+            li Modo de Preparo
+                ul
+                    each step in recipe.steps
+                        li= step.formatted
+            br
+
+        p(style='margin-top: 4px')
+            a(href=recipe.recipe.url+'/update') Atualizar
+        p
+            a(href=recipe.recipe.url+'/delete') Deletar
+        p
+            a(href=recipe.recipe.url+'/publish') Publicar
+    else
+        p Não encontrada.

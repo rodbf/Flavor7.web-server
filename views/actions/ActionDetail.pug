@@ -1,0 +1,23 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    if action
+        script console.log(!{JSON.stringify(action)})
+        ul
+            li= "Ação: " + action.action
+            li= "Descrição: " + action.description
+        p(style='margin-top: 4px')
+            a(href=action.url+'/update') Update
+        p
+            a(href=action.url+'/delete') Delete
+    else
+        p Não encontrado.
+
+    if recipe_list
+        if recipe_list.length > 0
+            h2 Receitas que contém este passo
+            ul
+                each recipe in recipe_list
+                    li
+                        a(href='/recipes/'+recipe.id)= recipe.name

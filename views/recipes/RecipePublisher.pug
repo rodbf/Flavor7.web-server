@@ -1,0 +1,138 @@
+extend ../Layout
+
+block head
+
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css")
+
+    script.
+        $(document).ready(function(){
+
+            $('#submit').click(
+                function(){
+                    var data = !{JSON.stringify(data)};
+                    console.log(data);
+
+                    var finalData = {};
+                    finalData.recipe = data.recipe;
+
+                    finalData.enabledDiets = [0];
+                    $('input.diets:checked').each(function(i, div){
+                        finalData.enabledDiets.push(parseInt(div.id));
+                    });
+
+                    finalData.tags = [];
+                    $('a.tags').each(function(i, div){
+                        finalData.tags.push(parseInt(div.id));
+                    });
+
+                    finalData.meals = [];
+                    $('input.meals:checked').each(function(i, div){
+                        finalData.meals.push(parseInt(div.id));
+                    });
+
+                    finalData.ingredients = data.ingredients;
+
+                    finalData.steps = data.steps;
+
+
+                    $('textArea#formContent').val(JSON.stringify(finalData));
+                    $('form#form').submit();
+                    console.log(finalData);
+                    return;
+
+                })
+
+        })
+
+
+mixin recipemixin(recipe={})
+    h1.title= "Receita "+ recipe.id
+    ul
+        li= "Id: " + recipe.id
+        li="Nome: "
+             a(href="/recipes/"+recipe.id)= recipe.name
+        li= "Descrição " + recipe.description
+        li= "Serve: " + recipe.servings + " porções"
+        li= "Tempo de preparo: " + recipe.duration + " minutos"
+    br
+
+mixin mealmixin(meals={})
+    hr
+    br
+    
+    h1.title= "Refeições"
+    each meal in meals
+        input.meals(id=meal.id, type='checkbox')
+        = " " + meal.name
+        br
+
+    br
+
+mixin dietmixin(diets={}, disabledDiets = [])
+    hr
+    br
+
+    h1.title= "Dietas"
+    each diet in diets
+        - let check = !disabledDiets.includes(diet.id)
+        if diet.id > 0
+            input.diets(id=diet.id, type='checkbox', checked=check, disabled)
+            = " " + diet.name
+            br
+
+    br
+
+mixin tagsmixin(tags={})
+    hr
+    br
+    
+    h1.title= "Tags"
+    ul
+        each tag in tags
+            li
+                a.tags(href='/tags/'+tag.id, id=tag.id)= tag.name
+
+
+    br
+
+mixin ingredientsmixin(ingredients={})
+    hr
+    br
+    
+    h1.title= "Ingredientes"
+    ul
+        each ingredient in ingredients
+            li
+                a.ingredients(href='/ingredients/'+ingredient.id)= ingredient.text
+
+    br
+
+mixin stepsmixin(steps={})
+    hr
+    br
+    
+    h1.title= "Passos"
+    ul
+        each step in steps
+            li= step.text
+
+    br
+
+block content
+
+    script console.log(!{JSON.stringify(data?data:'')})
+    
+    form#form(method='POST' action='' style="display: none")
+        textarea#formContent(name='data')
+
+    h1.title= title
+
+    +recipemixin(data.recipe)
+    +mealmixin(data.meals)
+    +dietmixin(data.diets, data.disabledDiets)
+    +tagsmixin(data.tags)
+    +ingredientsmixin(data.ingredients)
+    +stepsmixin(data.steps)
+
+    button#submit.btn.btn-primary.fit Enviar

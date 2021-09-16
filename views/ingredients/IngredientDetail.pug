@@ -1,0 +1,24 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    if ingredient
+        script console.log(!{JSON.stringify(ingredient)})
+        ul
+            li= "Nome: " + ingredient.name
+            li= "Plural: " + ingredient.plural
+            li= "Descrição: " + ingredient.description
+        p(style='margin-top: 4px')
+            a(href=ingredient.url+'/update') Update
+        p
+            a(href=ingredient.url+'/delete') Delete
+    else
+        p Não encontrado.
+
+    if recipe_list
+        if recipe_list.length > 0
+            h2 Receitas que contém este ingrediente
+            ul
+                each recipe in recipe_list
+                    li
+                        a(href='/recipes/'+recipe.id)= recipe.name

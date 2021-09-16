@@ -1,0 +1,21 @@
+extend ../Layout
+block content
+    h1.title= title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='text') Texto:
+            textarea#text.form-control(type='text' name='text' required='true')= step===undefined?'':step.text
+        p.fit O texto aceita os argumentos a seguir para serem posteriormente substituídos:
+        ul
+            li [ingrediente1], [ingrediente2], [ingrediente3], [ingrediente4]
+            li [tipo1], [tipo2], [tipo3]
+            li [artigo1], [artigo2], [artigo3]
+            li [complemento1], [complemento2], [complemento3]
+            li [temperatura], [tempo], [utensilio]
+        button.btn.btn-primary.fit(type='submit') Registrar
+
+    if errors
+        ul(style='margin-top: 8px')
+            for error in errors
+                li!= error.msg

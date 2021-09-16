@@ -1,0 +1,215 @@
+extend ../Layout
+
+block head
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css")
+    script(src="/javascripts/selectize.min.js")
+
+    script.
+        $( document ).ready(function() {
+
+            let stepDiv = $('div.stepdivmaster').clone(true);
+            $('div.stepdivmaster').remove();
+            stepDiv.attr("class", "stepdiv fit");
+            if($('div.stepdiv').length == 0)
+                stepDiv.clone(true).appendTo('#stepsdiv');
+
+            let ingDiv = $('div.ingredientdivmaster').clone(true);
+            $('div.ingredientdivmaster').remove();
+            ingDiv.attr("class", "ingredientdiv fit");
+            if($('div.ingredientdiv').length == 0)
+                ingDiv.clone(true).appendTo('#ingredientsdiv');
+
+            $('select').selectize({
+                sortField: 'text'
+            });
+
+            $('#submit').click(
+                function(){
+                    var formData = {
+                        "recipe": {
+                            "name": $('input[name=name]').val(),
+                            "duration": $('input[name=duration]').val(),
+                            "servings": $('input[name=servings]').val(),
+                            "description": $('textarea#description').val(),
+                        },
+                        "ingredients": [],
+                        "steps": []
+                    };
+
+                    $('div.ingredientdiv').each(function(i, div){
+                        var newIng = {};
+                        
+                        newIng.ingredient_id = $(div).find('select.ingredient').children("option:selected").val();
+                        newIng.amount = $(div).find('input.amount').val();
+                        newIng.unit_id = $(div).find('select.unit').children("option:selected").val();
+                        newIng.extrainfo = $(div).find('input.extrainfo').val();
+
+                        pos = $(div).find('.position').val();
+                        newIng.position = (pos==''?i:pos);
+
+                        formData.ingredients.push(newIng);
+                    })
+
+                    $('div.stepdiv').each(function(i, div) {
+                        var newStep = {};
+
+                        newStep.action_id = $(div).find('select.action').children("option:selected").val();
+                        newStep.step_text = $(div).find('textarea.step_text').val();
+
+                        pos = $(div).find('.position').val();
+                        newStep.position = (pos==''?i:pos);
+
+                        formData.steps.push(newStep);
+                    });
+
+                    $('textarea#recipejson').val(JSON.stringify(formData));
+
+                    //-console.log(formData);
+                    $('form#recipeform').submit();
+                    
+                    return false;
+                }
+            );
+
+            $('#addStep').click(function(){
+                newDiv = stepDiv.clone(true);
+                newDiv.find('select').selectize({sortField: 'text'});
+                newDiv.appendTo('#stepsdiv');
+
+            })
+
+            $('#addIngredient').click(function(){
+                newDiv = ingDiv.clone(true);
+                newDiv.find('select').selectize({sortField: 'text'});
+                newDiv.appendTo('#ingredientsdiv');
+
+            })
+
+            $(document).on("click", ".remove", function(e){
+                e.target.parentNode.parentNode.remove();
+            });
+
+
+        });
+
+mixin recipemixin(args=null)
+    div.col-xs-6.fit
+        label(for='name') Nome:
+        input#name.form-control(type='text' name='name' 
+            value=(args===undefined?'':args===null?'':args.name) required='true')
+
+    div.col-xs-3.fit
+        label(for='duration') Tempo de preparo:
+        input#duration.form-control(type='number' name='duration' 
+            value=(args===undefined?'':args===null?'':args.duration) required='true' min='1' step='1')
+
+    div.col-xs-3.fit
+        label(for='servings') Porções:
+        input#servings.form-control(type='text' name='servings' 
+            value=(args===undefined?'':args===null?'':args.servings) required='true')
+
+    div.col-xs-12.fit
+        label(for='description') Informações:
+        textarea#description.form-control(type='text' name='description' required='false')= (args===undefined?'':args===null?'':args.description)
+
+
+
+mixin ingredientmixin(args=null)
+    div.row.noedge
+        div.col-xs-1.fit
+                input.position.form-control(type='text' name='position' required='true' placeholder="#" value=(args?args.position:''))
+
+        div.col-xs-11.fit
+            select.ingredient(required placeholder="Selecione um ingrediente...")
+                option(value="")
+                each ing in ingredient_list
+                    option(value=ing.id selected=(args?ing.id==args.ingredient_id?'selected':false:false))= ing.name
+
+    div.row.noedge
+        div.col-xs-4.fit
+            input.amount.form-control(placeholder="Quantidade" type='number' name='amount' required='true' min='0' step='1' value=(args?args.amount:''))
+
+        div.col-xs-4.fit
+            select.unit(placeholder="Unidade...")
+                option(value="")
+                each unit in unit_list
+                    option(value=unit.id selected=(args?unit.id==args.unit_id?'selected':false:false))= unit.name
+
+        div.col-xs-4.fit
+            input.extrainfo.form-control(placeholder="Texto adicional" type='text' name='extrainfo' required='false' value=(args?args.extrainfo:''))
+
+    div.col-xs-12.fit
+        button.remove.btn.btn-primary.fit Remover
+    div.col-xs-12.fit
+        hr
+
+mixin stepmixin(args=null)
+    div.row.noedge
+        div.col-xs-1.fit
+            input.position.form-control(type='text' name='position' required='true' placeholder="#" value=(args?args.position:''))
+
+        div.col-xs-2.fit
+            select.action(placeholder="Ação..." required)
+                option(value="") 
+                each action in action_list
+                    option(value=action.id selected=(args?action.id==args.action_id?'selected':false:false))= action.action
+
+        div.col-xs-9.fit
+            textarea.step_text.form-control(type='text' name='step_text' required='false')= (args===undefined?'':args===null?'':args.step_text)
+
+    div.col-xs-12.fit
+        button.remove.btn.btn-primary.fit Remover
+    div.col-xs-12.fit
+        hr
+
+
+
+block content
+
+    script console.log(!{JSON.stringify(recipe?recipe:'')})
+
+    h1.title= title
+
+    form#recipeform(method='POST' action='' style="display: none")
+        textarea#recipejson(name='recipe')
+
+    div.container-fluid
+        div.row
+            div#recipediv.fit
+                +recipemixin(recipe?recipe.recipe:null)
+
+        div.row
+            div.col-xs-12.fit
+                hr
+
+        div.row
+            div#ingredientsdiv
+                h2.fit Ingredientes
+                button#addIngredient.btn.btn-primary.fit Adicionar ingrediente
+                div.ingredientdivmaster.fit
+                    +ingredientmixin
+                if recipe
+                    each ingredient in recipe.ingredients
+                        div.ingredientdiv.fit
+                            +ingredientmixin(ingredient)
+
+        div.row
+            div#stepsdiv
+                h2.fit Passos
+                button#addStep.btn.btn-primary.fit Adicionar passo
+                div.stepdivmaster.fit
+                    +stepmixin
+                if recipe
+                    each step in recipe.steps
+                        div.stepdiv.fit
+                            +stepmixin(step)
+
+        div.row
+
+            button#submit.btn.btn-primary.fit Enviar
+
+    if errors
+        ul(style='margin-top: 8px')
+            for error in errors
+                li(style="color: red")= error

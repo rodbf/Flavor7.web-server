@@ -1,0 +1,9 @@
+{
+    "TABLE": "ingredients",
+    "ID": "id",
+    "NAME": "ing_name",
+    "NAME_PLURAL": "ing_name_plural",
+    "DESCRIPTION": "description",
+    "PREPARATION_ID": "id_preparation",
+    "SUBRECIPE_ID": "id_recipe"
+}

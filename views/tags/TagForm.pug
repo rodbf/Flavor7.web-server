@@ -1,0 +1,68 @@
+extend ../Layout
+
+block head
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css")
+    script(src="/javascripts/selectize.min.js")
+
+    script.
+        $(document).ready(function(){
+
+            $('#submit').click(
+                function(){
+                    var finalData = {};
+                    finalData.name = $('input.name').val();
+
+                    finalData.dietBlacklist = [];
+                    $('input.diets:checked').each(function(i, div){
+                        finalData.dietBlacklist.push(parseInt(div.id));
+                    })
+
+
+                    $('textArea#formContent').val(JSON.stringify(finalData));
+                    $('form#form').submit();
+                    console.log(finalData);
+                    return;
+                }
+            );
+        });
+
+
+mixin dietmixin(diets={}, blacklist=[])
+    hr
+    br
+
+    h1.title= "Dietas que NÃO aceitam essa tag"
+    each diet in diets
+        - let check = blacklist.includes(diet.id)
+        if diet.id > 0
+            input.diets(id=diet.id, type='checkbox', checked=check)
+            = " " + diet.name
+            br
+
+    br
+
+block content
+    script console.log(!{JSON.stringify(tag?tag:'')})
+    script console.log(!{JSON.stringify(diets?diets:'')})
+    script console.log(!{JSON.stringify(blacklist?blacklist:'')})
+    h1.title= title
+    
+    form#form(method='POST' action='' style="display: none")
+        textarea#formContent(name='data')
+
+    label(for='name') Nome:
+    input.name.form-control(type='text' name='name' 
+    value=(tag===undefined?'':tag.name), required='true')
+    br
+
+    +dietmixin(diets, blacklist)
+
+
+
+    button#submit.btn.btn-primary Enviar
+
+    if errors
+        ul(style='margin-top: 8px')
+            for error in errors
+                li!= error.msg

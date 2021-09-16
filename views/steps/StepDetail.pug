@@ -1,0 +1,21 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    if step
+        ul
+            li= "Texto: " + step.text
+        p(style='margin-top: 4px')
+            a(href=step.url+'/update') Update
+        p
+            a(href=step.url+'/delete') Delete
+    else
+        p Não encontrado.
+
+    if recipe_list
+        if recipe_list.length > 0
+            h2 Receitas que contém este passo
+            ul
+                each recipe in recipe_list
+                    li
+                        a(href='/recipes/'+recipe.id)= recipe.name

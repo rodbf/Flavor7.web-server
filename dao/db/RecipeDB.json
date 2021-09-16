@@ -1,0 +1,11 @@
+{
+    "TABLE": "recipe",
+    "ID": "id",
+    "NAME": "recipe_name",
+    "DESCRIPTION": "recipe_description",
+    "STEPS": "steps",
+    "SERVINGS": "servings",
+    "SERVINGS_UNIT": "servings_id_unit",
+    "DURATION": "duration_minutes",
+    "MAIN_TAG": "id_main_tag"
+}

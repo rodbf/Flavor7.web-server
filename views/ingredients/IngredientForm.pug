@@ -1,0 +1,110 @@
+extend ../Layout
+
+block head
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css")
+    script(src="/javascripts/selectize.min.js")
+
+    script.
+        $(document).ready(function(){
+            let tagDiv = $('div.tagdivmaster').clone(true);
+            $('div.tagdivmaster').remove();
+            tagDiv.attr("class", "tagdiv fit");
+            if($('div.tagdiv').length == 0)
+                tagDiv.clone(true).appendTo('#tagsdiv');
+
+            $('select').selectize({
+                sortField: 'text'
+            });
+
+            $('#addTag').click(function(){
+                newTag = tagDiv.clone(true);
+                newTag.find('select').selectize({sortField: 'text'});
+                newTag.appendTo('#tagsdiv');
+            });
+
+            $(document).on("click", ".remove", function(e){
+                e.target.parentNode.parentNode.parentNode.remove();
+            });
+
+            $('#submit').click(
+                function(){
+                    var formData = {
+                        "name": $('input[name=name]').val(),
+                        "plural": $('input[name=plural]').val(),
+                        "description": $('input[name=description]').val(),
+                        "tags": []
+                    };
+
+                    $('div.tagdiv').each(function(i, div){
+                        let newTag = $(div).children().eq(0).children().eq(0).children().eq(0).val();
+                        console.log(newTag); 
+                        if(!formData.tags.includes(newTag) && newTag)
+                            formData.tags.push(newTag);
+                    })
+
+                    formData.tags = [...new Set(formData.tags)];
+
+                    $('textarea#ingredientjson').val(JSON.stringify(formData));
+                    console.log(formData);
+                    $('form#ingredientform').submit();
+
+                    return false;
+
+                })
+        });
+
+mixin tagmixin(tagid=null)
+    div.row.noedge
+        div.col.xs-9.fit
+            select.tag(placeholder="Tag..." required)
+                option(value='')
+                each tag in taglist
+                    option(value=tag.id selected=(tagid?tag.id==tagid?'selected':false:false))=tag.name
+        div.col-xs-3.fit
+            button.remove.btn.btn-primary.fit Remover
+        div.col-xs-12.fit
+            hr
+
+block content
+
+    script console.log(!{JSON.stringify(taglist?taglist:'')})
+    script console.log(!{JSON.stringify(ingredient?ingredient:'')})
+
+    h1.title= title
+
+    form#ingredientform(method='POST' action='' style="display: none")
+        textarea#ingredientjson(name='ingredient')
+
+    div.form-group.col-sm-6.fit
+        label(for='name') Nome:
+        input#name.form-control(type='text' name='name' 
+        value=(ingredient===undefined?'':ingredient.name), required='true')
+    div.form-group.col-sm-6.fit
+        label(for='plural') Plural:
+        input#plural.form-control(type='text' name='plural' 
+        value=(ingredient===undefined?'':ingredient.plural), required=false)
+    div.form-group.col-sm-12.fit
+        label(for='description') Descrição:
+        input#description.form-control(type='text' name='description' 
+        value=(ingredient===undefined?'':ingredient.description), required='true')
+
+    div.form-group.col-sm-12.fit
+        div#tagsdiv
+            h2.fit Tags
+            button#addTag.btn.btn-primary.fit Adicionar tag
+            div.tagdivmaster.fit
+                +tagmixin
+            if ingredient
+                if ingredient.tags
+                    each tag in ingredient.tags
+                        div.tagdiv.fit
+                            +tagmixin(tag)
+
+
+    button#submit.btn.btn-primary.fit Enviar
+
+    if errors
+        ul(style='margin-top: 8px')
+            for error in errors
+                li!= error

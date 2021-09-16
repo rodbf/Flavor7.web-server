@@ -1,0 +1,6 @@
+{
+    "TABLE": "units",
+    "ID": "id",
+    "NAME": "unit_name",
+    "NAME_PLURAL": "unit_name_plural"
+}

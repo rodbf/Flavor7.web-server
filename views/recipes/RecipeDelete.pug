@@ -1,0 +1,11 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    p Deseja deletar a receita #{recipe.name}?
+
+    form.sideBySideForm(method='POST' action='')
+        button.btn.btn-primary(type='submit') Confirmar
+
+    form.sideBySideForm(method='GET' action=recipe.url)
+        button.btn.btn-primary(type='submit') Cancelar

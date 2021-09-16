@@ -1,0 +1,123 @@
+h1 { 
+    margin: 0px;
+}
+body{
+    padding: 4px;
+}
+
+p { 
+    margin: 0px;
+} 
+
+hr{
+    margin-top: 5px;
+    margin-bottom: 4px;
+    border-top: 1px solid #ffa726;
+}
+
+h1.topbar {
+    font-family: "Dancing Script";
+    font-family: "TestFamily";
+    font-size: 48px;
+    color: #774f13;
+}
+
+h1.title{
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+@font-face {
+  font-family:"TestFamily";
+  src: url("dancing_script.ttf") format("truetype");
+}
+
+h2{
+    font-size: 20px;
+}
+
+div.topbar {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 36px;
+    background: #ffa726;
+    border-radius: 36px;
+}
+
+div.navigation{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    padding-left: 0.5em;
+}
+
+div.content{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    padding-left: 0.5em;
+}
+
+div.fit{
+    margin: 0px;
+    padding: 4px;
+    border: 0px;
+}
+
+div.noedge{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+button.fit, h2.fit{
+    margin: 4px;
+    display: inline-block;
+}
+
+
+div.border-outline{
+    padding: 12px;
+    border: 1px solid #ffa726;
+    border-radius: 24px;
+}
+
+ul{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    list-style-position: inside;
+}
+
+li{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    margin-left: 0.5em;
+}
+
+li span{
+    margin-left: -0.5em;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+
+.sideBySideForm{
+display: inline-block;
+padding-left: 4px;
+padding-top: 4px;
+}

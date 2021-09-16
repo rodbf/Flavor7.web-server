@@ -1,0 +1,12 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    script console.log(!{JSON.stringify(action_list?action_list:'')})
+    ul
+        each action in action_list
+            li
+                a(href=action.url) #{action.id}.#{action.action} - #{action.description}
+
+        else
+            li Não há ações. 

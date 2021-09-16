@@ -1,0 +1,12 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    script console.log(!{JSON.stringify(step_list?step_list:'')})
+    ul
+        each step in step_list
+            li
+                a(href=step.url) #{step.id}.#{step.text}
+
+        else
+            li Não há passos. 

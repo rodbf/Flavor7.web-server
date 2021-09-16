@@ -1,0 +1,5 @@
+{
+    "TABLE": "tags",
+    "ID": "id",
+    "NAME": "tag_name"
+}

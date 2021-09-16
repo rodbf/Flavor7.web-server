@@ -1,0 +1,14 @@
+extend ../Layout
+
+block content
+    h1.title= title
+    script console.log(!{JSON.stringify(ingredient_list?ingredient_list:'')})
+    ul
+        each ingredient in ingredient_list
+            li
+                a(href=ingredient.url) #{ingredient.name} 
+                   if ingredient.description != null
+                        | - #{ingredient.description}
+
+        else
+            li Não há ingredientes. 

@@ -1,0 +1,17 @@
+doctype html
+html
+    include head
+    block head
+    body
+        div.container-fluid
+            div.row
+                div.col-sm-12.fit
+                    div.topbar
+                        include topbar
+            div.row
+                div.col-sm-2.fit
+                    div.navigation.border-outline
+                        include navbar
+                div.col-sm-10.fit
+                    div.content.border-outline
+                        block content

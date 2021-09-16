@@ -1,0 +1,11 @@
+{
+    "TABLE": "recipe_ingredients",
+    "ID": "id",
+    "RECIPE_ID": "id_recipe",
+    "INGREDIENT_ID": "id_ingredients",
+    "AMOUNT": "amount",
+    "UNIT_ID": "id_unit",
+    "PREPARATION_ID": "id_preparation",
+    "EXTRA_INFO": "extra_info",
+    "COMPONENT_RATE": "component_rate"
+}
